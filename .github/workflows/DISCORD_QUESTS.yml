@@ -12,11 +12,15 @@ jobs:
     steps:
       - name: Send Issue to Discord
         uses: Ilshidur/action-discord@master
-        with:
-          args: |
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUESTS }}
+          DISCORD_USERNAME: wb notifs bot
+          DISCORD_AVATAR: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          DISCORD_CONTENT: |
             🏆 **New Quest/Bounty Created**
             📌 Title: ${{ github.event.issue.title }}
             📝 Description: ${{ github.event.issue.body }}
-            🔗 [View on GitHub](${{ github.event.issue.html_url }})
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUESTS }}
+            
+
+            ${{ github.event.issue.title || github.event.pull_request.title || 'No title' }}
+            🔗 [View on GitHub](${{ github.event.issue.html_url || github.event.pull_request.html_url || github.event.comment.html_url || github.event.head_commit.url }})
