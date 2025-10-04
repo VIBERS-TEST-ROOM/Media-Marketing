@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     # Only trigger if the title starts with [Bounty] or [Quest]
     if: ${{ github.event.issue && (startsWith(github.event.issue.title, '[Bounty]') || startsWith(github.event.issue.title, '[Quest]')) }}
-     steps:
+    steps:
       - name: Send Issue to Discord
         uses: Ilshidur/action-discord@master
         with:
