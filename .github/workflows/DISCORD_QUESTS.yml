@@ -17,4 +17,4 @@ jobs:
             📝 Description: ${{ github.event.issue.body }}
             🔗 [View on GitHub](${{ github.event.issue.html_url }})
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUESTS }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUEST }}
