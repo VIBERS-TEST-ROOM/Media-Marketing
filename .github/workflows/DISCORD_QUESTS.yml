@@ -1,0 +1,20 @@
+name: Discord Quests Notifications
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Issue to Discord
+        uses: Ilshidur/action-discord@master
+        with:
+          args: |
+            🏆 **New Quest/Bounty Created**
+            📌 Title: ${{ github.event.issue.title }}
+            📝 Description: ${{ github.event.issue.body }}
+            🔗 [View on GitHub](${{ github.event.issue.html_url }})
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUESTS }}
