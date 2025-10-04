@@ -1,0 +1,25 @@
+name: Discord Submissions
+
+on:
+  repository_dispatch:   # allows external services (like Discord bots) to trigger this
+    types: [discord_submission]
+
+jobs:
+  create_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Issue from Discord Submission
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Submission: ${{ github.event.client_payload.title }}"
+          content-filepath: ./submission.md
+          labels: |
+            submission
+            discord
+      - name: Save Submission Content
+        run: |
+          echo "### New Submission" > submission.md
+          echo "" >> submission.md
+          echo "**Submitted by:** ${{ github.event.client_payload.user }}" >> submission.md
+          echo "" >> submission.md
+          echo "${{ github.event.client_payload.content }}" >> submission.md
