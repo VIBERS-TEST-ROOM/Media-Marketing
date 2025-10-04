@@ -9,21 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     # Only trigger if the title starts with [Bounty] or [Quest]
     if: ${{ github.event.issue && (startsWith(github.event.issue.title, '[Bounty]') || startsWith(github.event.issue.title, '[Quest]')) }}
-    steps:
-      - name: Send Quest Notification
+     steps:
+      - name: Send Issue to Discord
         uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUESTS }}
         with:
           args: |
-            {% if github.event.action == 'opened' %}
-            🎯 **New Quest / Bounty Created**
-            Title: ${{ github.event.issue.title }}
-            Author: ${{ github.actor }}
-            Link: ${{ github.event.issue.html_url }}
-            {% elif github.event.action == 'closed' %}
-            🏁 **Quest / Bounty Closed**
-            Title: ${{ github.event.issue.title }}
-            Closed by: ${{ github.actor }}
-            Link: ${{ github.event.issue.html_url }}
-            {% endif %}
+            🏆 **New Quest/Bounty Created**
+            📌 Title: ${{ github.event.issue.title }}
+            📝 Description: ${{ github.event.issue.body }}
+            🔗 [View on GitHub](${{ github.event.issue.html_url }})
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUESTS }}
