@@ -1,24 +1,20 @@
-name: Discord Quest Updates
+name: Discord Quests Notifications
 
 on:
   issues:
-    types: [opened, closed, labeled]
-  issue_comment:
-    types: [created]
+    types: [opened, edited]
 
 jobs:
-  notify-quests:
+  notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Quest/Bounty Notification
-        if: ${{ startsWith(github.event.issue.title, '[Bounty]') || startsWith(github.event.issue.title, '[Quest]') }}
+      - name: Send Issue to Discord
         uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUESTS }}
         with:
           args: |
-            🎯 **Quest/Bounty Update**
-            Title: ${{ github.event.issue.title }}
-            By: ${{ github.actor }}
-            Event: ${{ github.event.action }}
-            Link: ${{ github.event.issue.html_url }}
+            🏆 **New Quest/Bounty Created**
+            📌 Title: ${{ github.event.issue.title }}
+            📝 Description: ${{ github.event.issue.body }}
+            🔗 [View on GitHub](${{ github.event.issue.html_url }})
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUESTS }}
