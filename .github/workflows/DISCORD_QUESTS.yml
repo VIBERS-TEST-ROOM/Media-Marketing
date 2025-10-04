@@ -1,20 +1,28 @@
-name: Discord Quests Notifications
+name: Quest Notify Discord
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened, closed]
+  issue_comment:
+    types: [created]
+  pull_request:
+    types: [opened, closed]
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Issue to Discord
+      - name: Send Discord Notification
         uses: Ilshidur/action-discord@master
-        with:
-          args: |
-            🏆 **New Quest/Bounty Created**
-            📌 Title: ${{ github.event.issue.title }}
-            📝 Description: ${{ github.event.issue.body }}
-            🔗 [View on GitHub](${{ github.event.issue.html_url }})
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUEST }}
+          DISCORD_USERNAME: GitHub Bot
+          DISCORD_AVATAR: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          DISCORD_CONTENT: |
+            🏛️ **WG Quests**
+            📂 Repo: ${{ github.repository }}
+            👤 By: ${{ github.actor }}
+            📌 Event: ${{ github.event_name }}
+
+            ${{ github.event.issue.title || github.event.pull_request.title || 'No title' }}
+            🔗 [View on GitHub](${{ github.event.issue.html_url || github.event.pull_request.html_url || github.event.comment.html_url || github.event.head_commit.url }})
