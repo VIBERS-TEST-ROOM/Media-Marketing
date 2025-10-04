@@ -1,28 +1,24 @@
-name: Quest Notify Discord
+name: Discord Quest Notifications
 
 on:
   issues:
     types: [opened, closed]
-  issue_comment:
-    types: [created]
-  pull_request:
-    types: [opened, closed]
 
 jobs:
-  notify:
+  quest:
     runs-on: ubuntu-latest
+    if: ${{ github.event.issue && (startsWith(github.event.issue.title, '[Bounty]') || startsWith(github.event.issue.title, '[Quest]')) }}
     steps:
-      - name: Send Discord Notification
+      - name: Debug Title
+        run: echo "Issue title is:${{ github.event.issue.title }}"
+
+      - name: Send Quest Notification
         uses: Ilshidur/action-discord@master
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUEST }}
-          DISCORD_USERNAME: GitHub Bot
-          DISCORD_AVATAR: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-          DISCORD_CONTENT: |
-            🏛️ **WG Quests**
-            📂 Repo: ${{ github.repository }}
-            👤 By: ${{ github.actor }}
-            📌 Event: ${{ github.event_name }}
-
-            ${{ github.event.issue.title || github.event.pull_request.title || 'No title' }}
-            🔗 [View on GitHub](${{ github.event.issue.html_url || github.event.pull_request.html_url || github.event.comment.html_url || github.event.head_commit.url }})
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_QUESTS }}
+        with:
+          args: |
+            🎯 **New Quest / Bounty**
+            Title: ${{ github.event.issue.title }}
+            Author: ${{ github.actor }}
+            Link: ${{ github.event.issue.html_url }}
