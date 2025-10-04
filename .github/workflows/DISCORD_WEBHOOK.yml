@@ -11,7 +11,7 @@ on:
 jobs:
   general:
     runs-on: ubuntu-latest
-    # Only trigger if the title does not starts with [Bounty] or [Quest]
+    # Only trigger if the title does not start with [Bounty] or [Quest]
     if: ${{ !github.event.issue || (!startsWith(github.event.issue.title, '[Bounty]') && !startsWith(github.event.issue.title, '[Quest]')) }}
     steps:
       - name: Send General Notification
